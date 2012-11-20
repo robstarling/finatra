@@ -18,8 +18,15 @@ package com.twitter.finatra
 import com.twitter.util.Future
 import com.twitter.finagle.http.{Response => FinagleResponse}
 
+object ResponseAdapter {
+  def apply(resp: Future[Response]) = {
+    val adapter = new FinatraResponseConverter
+    adapter(resp)
+  }
+}
+
 class FinatraResponseConverter {
-  def apply(resp: Future[Response]):Future[FinagleResponse] = {
+  def apply(resp: Future[Response]): Future[FinagleResponse] = {
     resp.map(_.build)
   }
 }
